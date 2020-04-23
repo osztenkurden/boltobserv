@@ -24,13 +24,7 @@ app.use((req, _res, next) => {
 
 radar.startRadar(app, io);
 
-for (let dir of ["css", "renderers", "img", "maps"]) {
-	app.use(`/boltobserv/${dir}`, express.static(path.join(__dirname, dir)))
-}
 app.post("/", (req, res) => {
 	radar.digestRadar(req.body);
 	res.sendStatus(200);
 });
-app.get("/radar", (req, res) => {
-	res.sendFile(path.join(__dirname, "html", "index.html"))
-})
