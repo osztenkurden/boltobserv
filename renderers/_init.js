@@ -20,13 +20,12 @@ function importScripts() {
 	// Go through all scripts and append them to the body
 	for (let script of hasConfig) {
 		let tag = document.createElement("script")
-		tag.setAttribute("src", "/renderers/" + script)
+		tag.setAttribute("src", "/boltobserv/renderers/" + script)
 		document.body.appendChild(tag)
 	}
 	document.body.classList.remove("waiting")
 }
 websocket.on("welcome", event => {
-	console.log(event)
 	if (hasConfig) return
 	hasConfig = event.data.scripts
 	global.config = event.data.config

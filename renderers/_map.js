@@ -4,6 +4,7 @@
 // metadata and applying some general config values.
 
 // Catch map data send by the game
+let currentMap = '';
 websocket.on("map", event => {
 	/**
 	 * Show a map error and quit
@@ -13,16 +14,16 @@ websocket.on("map", event => {
 		document.getElementById("unknownMap").style.display = "flex"
 		document.getElementById("unknownMap").children[0].innerHTML = text
 	}
-
-	// If map is unchanged we do not need to do anything
-	if (global.currentMap == event.data) return
-
 	let mapName = event.data
 	if (mapName.indexOf("/") != -1) {
 		mapName = mapName.split("/")[mapName.split("/").length - 1]
 	}
+	// If map is unchanged we do not need to do anything
+	if (global.currentMap == mapName) return
 
-	fetch(window.location.origin + `/maps/${mapName}/meta.json5`)
+
+
+	fetch(window.location.origin + `/boltobserv/maps/${mapName}/meta.json5`)
 	.then(resp => resp.text())
 	.then(data => {
 		data = data.replace(/^\s*?\/\/.*?$/gm, "")
@@ -37,7 +38,7 @@ websocket.on("map", event => {
 		document.getElementById("unknownMap").style.display = "none"
 
 		// Show the radar backdrop
-		document.getElementById("radar").src = `/maps/${mapName}/radar.png`
+		document.getElementById("radar").src = `/boltobserv/maps/${mapName}/radar.png`
 
 		// Set the map as the current map and in the window title
 		global.currentMap = mapName

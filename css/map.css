@@ -18,7 +18,7 @@ body.waiting #container {
 	transform: scale(1) translate(0%, 0%);
 
 	will-change: transform;
-	outline: .1vmin solid transparent
+	outline: .1vmin solid transparent;
 	-webkit-backface-visibility: hidden;
 }
 
@@ -90,7 +90,7 @@ body.waiting #container {
 
 #bomb {
 	position: absolute;
-	background-image: url("../img/bomb-dropped.png");
+	background-image: url("/boltobserv/img/bomb-dropped.png");
 	background-size: contain;
 	height: 2.2vmin;
 	width: 2.2vmin;
@@ -101,12 +101,12 @@ body.waiting #container {
 }
 
 #bomb.defused {
-	background-image: url("../img/bomb-defused.png");
+	background-image: url("/boltobserv/img/bomb-defused.png");
 	filter: drop-shadow(0 0 .4vmin rgba(0, 255, 0, .3));
 }
 
 #bomb.planted {
-	background-image: url("../img/bomb-planted.png");
+	background-image: url("/boltobserv/img/bomb-planted.png");
 	animation: beep 1s infinite;
 }
 
@@ -236,7 +236,7 @@ div.label.dead {
 }
 
 #advisory.planting::before {
-	background-image: url("../img/adv-plant.png");
+	background-image: url("/boltobserv/img/adv-plant.png");
 }
 
 #advisory.planting {
@@ -245,7 +245,7 @@ div.label.dead {
 }
 
 #advisory.defuse::before {
-	background-image: url("../img/adv-defuse.png");
+	background-image: url("/boltobserv/img/adv-defuse.png");
 }
 
 #advisory.defuse {
@@ -254,7 +254,7 @@ div.label.dead {
 }
 
 #advisory.solesurvivor::before {
-	background-image: url("../img/adv-solesurvivor.png");
+	background-image: url("/boltobserv/img/adv-solesurvivor.png");
 }
 
 #advisory.solesurvivor {

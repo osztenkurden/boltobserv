@@ -6,9 +6,7 @@ const server = app.listen(1337, () => {
 	console.info(`Browser view enabled at http://${ip.address()}:1337`)
 })
 const io = require("socket.io").listen(server)
-const gsi = require("./modules/gsi")
-gsi.init(io);
-
+const radar = require("./init.js");
 app.use(express.urlencoded({extended:true}));
 app.use(express.raw({limit: '10Mb', type: 'application/json'}));
 app.use((req, _res, next) => {
@@ -24,17 +22,15 @@ app.use((req, _res, next) => {
 	}
 });
 
-app.get("/favicon.ico", (req, res) => {res.sendFile(path.join(__dirname, "img", "favicon.ico"))})
+radar.startRadar(app, io);
 
 for (let dir of ["css", "renderers", "img", "maps"]) {
-	app.use(`/${dir}`, express.static(path.join(__dirname, dir)))
+	app.use(`/boltobserv/${dir}`, express.static(path.join(__dirname, dir)))
 }
 app.post("/", (req, res) => {
-	gsi.digest(req.body);
+	radar.digestRadar(req.body);
 	res.sendStatus(200);
 });
 app.get("/radar", (req, res) => {
 	res.sendFile(path.join(__dirname, "html", "index.html"))
 })
-
-module.exports = io;
