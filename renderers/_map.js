@@ -4,7 +4,7 @@
 // metadata and applying some general config values.
 
 // Catch map data send by the game
-socket.element.addEventListener("map", event => {
+websocket.on("map", event => {
 	/**
 	 * Show a map error and quit
 	 * @param  {String} text What error message to show

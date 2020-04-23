@@ -11,15 +11,13 @@
   "scripts": {
     "start": "electron ."
   },
-  "author": "Boltgolt <hey@boltgolt.nl> (https://boltgolt.nl)",
+  "author": "Boltgolt <hey@boltgolt.nl> (https://boltgolt.nl), osztenkurden <osztenkurden@gmail.com>",
   "license": "GPL-3.0",
-  "devDependencies": {
-    "electron": "^4.1.0",
-    "electron-packager": "^14.0.6"
-  },
   "dependencies": {
     "express": "^4.17.1",
+    "ip": "^1.1.5",
     "json5": "^2.1.0",
+    "socket.io": "^2.3.0",
     "ws": "^7.1.2"
   }
 }

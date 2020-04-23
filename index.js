@@ -1,78 +1,40 @@
-// ================================================================================
-//
-//                              PLEASE READ:
-// This project is under a GPL-3 license, you are REQUIRED to publicly publish any
-// changes or upgrades you make to the codebase, it strengthens the community.
-// Contact the maintainer if you have any questions regarding the license.
-//
-// ================================================================================
-
+const express = require("express")
 const path = require("path")
-const child_process = require("child_process")
+const ip = require("ip");
+const app = express()
+const server = app.listen(1337, () => {
+	console.info(`Browser view enabled at http://${ip.address()}:1337`)
+})
+const io = require("socket.io").listen(server)
+const gsi = require("./modules/gsi")
+gsi.init(io);
 
-const config = require("./loadconfig")()
-const window = require("./window")
+app.use(express.urlencoded({extended:true}));
+app.use(express.raw({limit: '10Mb', type: 'application/json'}));
+app.use((req, _res, next) => {
+	try{
+		if(req.body){
+			const payload = req.body.toString();
+			const text = payload.replace(/"(player|owner)":([ ]*)([0-9]+)/gm, '"$1": "$3"').replace(/(player|owner):([ ]*)([0-9]+)/gm, '"$1": "$3"');
+			req.body = JSON.parse(text);
+		}
+		next();
+	} catch(e) {
+		next();
+	}
+});
 
-let hasMap = false
-let connTimeout = false
-var win = false
+app.get("/favicon.ico", (req, res) => {res.sendFile(path.join(__dirname, "img", "favicon.ico"))})
 
-let gsi = child_process.fork(`${__dirname}/gsi.js`)
-let http = child_process.fork(`${__dirname}/http.js`)
-let socket = child_process.fork(`${__dirname}/socket.js`)
-
-function setActivePage(page, win) {
-	if (window.win !== false) window.win.loadFile(`html/${page}.html`)
-	http.send(page)
-
-	socket.send({
-		type: "pageUpdate"
-	})
+for (let dir of ["css", "renderers", "img", "maps"]) {
+	app.use(`/${dir}`, express.static(path.join(__dirname, dir)))
 }
-
-gsi.on("message", (message) => {
-	socket.send(message)
-
-	if (message.type == "connection") {
-		if (message.data.status == "up" && connTimeout === false && config.game.connectionTimout >= 0) {
-			console.info("CSGO has pinged server, connection established")
-		}
-	}
-	else if (!hasMap) {
-		if (message.type == "map") {
-			setActivePage("map", win)
-			hasMap = true
-
-			console.info(`Map ${message.data} selected`)
-		}
-	}
-
-	if (config.game.connectionTimout >= 0) {
-		clearTimeout(connTimeout)
-		connTimeout = setTimeout(() => {
-			hasMap = false
-			setActivePage("waiting", win)
-		}, config.game.connectionTimout * 1000)
-	}
+app.post("/", (req, res) => {
+	gsi.digest(req.body);
+	res.sendStatus(200);
+});
+app.get("/radar", (req, res) => {
+	res.sendFile(path.join(__dirname, "html", "index.html"))
 })
 
-if (!config.debug.terminalOnly) {
-	window.gsi = gsi
-	window.http = http
-	window.socket = socket
-	window.build()
-}
-else {
-	console.info("Not opening window, terminal only mode is enabled")
-}
-
-function cleanup() {
-	gsi.kill()
-	http.kill()
-	socket.kill()
-	window.app.quit()
-}
-
-for (let signal of ["exit", "SIGINT", "SIGUSR1", "SIGUSR2"]) {
-	process.on(signal, cleanup)
-}
+module.exports = io;

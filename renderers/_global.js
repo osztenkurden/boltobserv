@@ -85,7 +85,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 // On a round indicator packet
-socket.element.addEventListener("round", event => {
+websocket.on("round", event => {
 	let phase = event.data
 
 	// Abort if there's no change in phase
@@ -95,7 +95,7 @@ socket.element.addEventListener("round", event => {
 	if ((phase == "freezetime" && global.gamePhase == "over") || (phase == "live" && global.gamePhase == "over")) {
 		// Emit a custom event
 		let roundend = new Event("roundend")
-		socket.element.dispatchEvent(roundend)
+		// socket.element.dispatchEvent(roundend)
 	}
 
 	// Set the new phase
@@ -103,6 +103,6 @@ socket.element.addEventListener("round", event => {
 })
 
 // On a round indicator packet
-socket.element.addEventListener("effect", event => {
+websocket.on("effect", event => {
 	global.effects[event.data.key] = event.data.value
 })
