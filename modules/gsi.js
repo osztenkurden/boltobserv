@@ -1,5 +1,3 @@
-
-const remotenades = require("./../remotenades.js")
 const config = require("./../loadconfig")()
 let oldPhase = false
 let infernosOnMap = [] //initial molotov status
@@ -57,10 +55,6 @@ module.exports = {
                 type: "map",
                 data: game.map.name
             })
-
-            if (config.nadeCollection) {
-                remotenades.setMap(game.map.name)
-            }
         }
 
         if (game.allplayers) {
@@ -180,9 +174,6 @@ module.exports = {
                 type: "infernos",
                 data: infernos
             })
-            if (config.nadeCollection) {
-                remotenades.event(game.grenades)
-            }
         }
 
         if (game.round) {
@@ -192,13 +183,6 @@ module.exports = {
             })
             if (oldPhase == "over" && game.round.phase == "freezetime") {
                 infernosOnMap = [] //clear molotov status every round
-            }
-            if (oldPhase != game.round.phase && config.nadeCollection) {
-                if (oldPhase == "over" && game.round.phase == "freezetime") {
-                    remotenades.send()
-                }
-
-                oldPhase = game.round.phase
             }
         }
 
