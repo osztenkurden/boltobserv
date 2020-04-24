@@ -23,9 +23,9 @@ function importScripts() {
 		tag.setAttribute("src", "/boltobserv/renderers/" + script)
 		document.body.appendChild(tag)
 	}
-	document.body.classList.remove("waiting")
 }
-websocket.on("welcome", event => {
+
+socket.element.addEventListener("welcome", event => {
 	if (hasConfig) return
 	hasConfig = event.data.scripts
 	global.config = event.data.config
@@ -41,6 +41,17 @@ websocket.on("welcome", event => {
 		labelElement.style.transform = `scale(${global.config.radar.playerDotScale}) translate(-50%, -50%)`
 	}
 
+	if (navigator.userAgent.toLowerCase().indexOf(" electron/") <= -1) {
+		// Remove the elements meant to drag the window in electron
+		document.getElementById("dragarea").style.display = "none"
+		// Set cursor to default, as we don't have a drag area
+		document.body.style.cursor = "default"
+
+		if (!global.config.browser.transparent) {
+			document.body.style.background = "#000"
+		}
+	}
+
 	// Do the same for the bomb icon
 	document.getElementById("bomb").style.transform = `scale(${event.data.config.radar.playerDotScale}) translate(-50%, -50%)`
 })
@@ -49,7 +60,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	// If not electron (browser)
 	if (navigator.userAgent.toLowerCase().indexOf(" electron/") <= -1) {
 		// Reload the site when a new HTML page has been rendered
-		websocket.on("pageUpdate", event => {
+		socket.element.addEventListener("pageUpdate", event => {
 			location.reload()
 		})
 	}

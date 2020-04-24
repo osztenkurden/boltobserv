@@ -3,7 +3,7 @@
 // Shows smokes on map an calculates duration.
 
 // The live position of all smokes
-websocket.on("smokes", event => {
+socket.element.addEventListener("smokes", event => {
 	let smokes = event.data
 
 	// Called to show the fade in animation with a delay
@@ -65,7 +65,7 @@ websocket.on("smokes", event => {
 })
 
 //molotov on radar
-websocket.on("infernos", event => {
+socket.element.addEventListener("infernos", event => {
 	let infernos = event.data
 
 	// Go through each smoke
@@ -100,13 +100,13 @@ websocket.on("infernos", event => {
 
 })
 
-websocket.on("infernoRemove", event => {
+socket.element.addEventListener("infernoRemove", event => {
 	if (document.getElementById("inferno" + event.data)) {
 		document.getElementById("inferno" + event.data).style.opacity = 0
 	}
 })
 // Clear all smokes on round reset
-websocket.on("roundend", event => {
+socket.element.addEventListener("roundend", event => {
 	document.getElementById("smokes").innerHTML = ""
 	document.getElementById("infernos").innerHTML = ""
 })

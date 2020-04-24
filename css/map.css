@@ -6,9 +6,7 @@ body {
 	-webkit-backface-visibility: hidden;
 	transition: transform .025;
 }
-body.waiting #container {
-	display:none;
-}
+
 #radar {
 	height: 100%;
 	position: absolute;

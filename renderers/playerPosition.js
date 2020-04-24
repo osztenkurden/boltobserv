@@ -3,7 +3,7 @@
 // Sets player dot style and pushed to player location buffer, but does not set
 // the location.
 
-websocket.on("players", event => {
+socket.element.addEventListener("players", event => {
 	let data = event.data
 
 	// Abort if no map has been selected yet
@@ -41,7 +41,7 @@ websocket.on("players", event => {
 })
 
 // On round reset
-websocket.on("roundend", event => {
+socket.element.addEventListener("roundend", event => {
 	let phase = event.data
 
 	// Go through each player

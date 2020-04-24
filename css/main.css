@@ -20,7 +20,6 @@ body > div {
 }
 
 #dragarea {
-	display: none;
 	-webkit-app-region: drag;
 	height: calc(96vh - 20px);
 	width: calc(96vw - 20px);
